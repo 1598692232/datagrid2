@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" href="../liger-common.css">-->
+    <!--<link rel="stylesheet" href="../ligerui-grid2.css">-->
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="../bower_components/pager/index.css" media="screen" title="no title" charset="utf-8">
+    <!--<link rel="stylesheet" href="../cus/demo2.css">-->
+    <title>Title</title>
+</head>
+<body>
+<div class="main">
+    <div id="maingrid" >
+    </div>
+</div>
+<div class="main">
+    <div id="maingrid2" style="margin: 0; padding: 0">
+    </div>
+</div>
+
+
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="../bower_components/class/index.js"></script>
+<script type="text/javascript" src="../bower_components/pager/index.js"></script>
+<script src="../ligergrid.js"></script>
+<!--<script type="text/javascript" src="demo2.js"></script>-->
+<script type="text/javascript" src="demo2.1.js"></script>
+<!--<script type="text/javascript" src="demo1.js"></script>-->
+<!--<script type="text/javascript" src="treeData.js"></script>-->
+<!--<script type="text/javascript" src="AllOrdersData.js"></script>-->
+
+<script src="../index.js"></script>
+
+<script>
+    $("#maingrid").datagrid2({
+       /*
+       * columns列参数
+       * source 数据
+       * children 详细列表
+       * height 高度
+       * enabledSort 是否排序
+       * */
+        columns: [
+            { display: 'gouxuan', name: 'checkbox', align: 'left' ,render:function(row){
+                return  '<input type ="checkbox" rowid ="' + row.id + '">';
+            }},
+            { display: '顾客', name: 'CustomerID', align: 'left' },
+            { display: '公司名', name: 'CompanyName',align:'left' ,frozen:true},
+            { display: '联系人', name: 'ContactName' },
+            { display: '地址', name: 'Address' },
+            { display: '邮编', name: 'PostalCode',isSort:false },
+            { display: '城市', name: 'City' },
+            { display: '操作', name: 'do' ,render:function(){  return  "<input type='text'/>"}}
+        ],
+
+        source: {
+            ajaxUrl:"./a.json" ,
+            type:"post",
+            requestData: {
+                a:"qeqwe",
+                id:"555",
+                name:"55kai",
+                iPager:4,
+                iPerPage:"12"
+            },
+            dataRowsField:"List",
+            dataTotalField:"Total",
+            perPager:"iPerPage",
+            currentPageField:"iPager",
+            sortColField:"colNames",
+            sortNameField:"sortNames"
+        },
+//        data:CustomersData2.Rows,
+
+        height:700,
+        children:{
+            showDetail:function(row, detailPanel,callback){
+                f_showOrder(row, detailPanel,callback);
+            },
+//            height:"500",
+            closeDetail:function () {
+
+            }
+        },
+
+//        isPager:false,
+//        enabledSort:false
+
+    }).on("datagrid2:aftershowdata",function (event,data) {
+        console.log(event,data,12345)
+    }).on("datagrid2:beforeshowdata",function (event,data) {
+        console.log(event,data,23456)
+    }).on("datagrid2:showDetail",function(){
+        console.log(112113123123123131);
+    }).on("datagrid2:closeDetail",function(){
+        console.log(92829393893);
+    }).on("datagrid2:selectrow",function(){
+        console.log(arguments,"selectrow");
+    }).on("datagrid2:changesort",function(){
+        console.log(arguments,"selectrow");
+    }).on("datagrid2:xhrsuccess",function(event,data,a){
+        console.log(event,data,a,"selectrow");
+    });
+
+
+    //显示子表格案例
+    function f_showOrder(row, detailPanel,callback)
+    {
+//        console.log(row, detailPanel,callback);
+        var grid = document.createElement('div');
+//console.log($(detailPanel).parents(".l-grid").first().find(".l-grid2 >.l-grid-body-table"),18723123123819028390);
+//        $(detailPanel).parents(".l-grid").first().find(".l-grid2 > tbody").find(".l-grid-detailpanel-inner").eq(row.__index).append(grid);
+        $(detailPanel).append(grid);
+        $(grid).css('margin',10).datagrid2({
+            columns:
+                    [
+
+                        { display: '订单序号', name: 'OrderID', width:100 },
+                        { display: '运费', name: 'Freight',  width:100 },
+                        { display: '收货人', name: 'ShipName' , width:100 },
+                        { display: '收货地址', name: 'ShipAddress' ,  width:100},
+                        { display: '收货城市', name: 'ShipCity' ,  width:100},
+                        { display: '收货国家', name: 'ShipCountry' ,  width:100}
+                    ],
+            source: {
+                ajaxUrl:"./AllOrdersData.json" ,
+                type:"post",
+                requestData: {
+                    a:"qeqwe",
+                    id:"555",
+                    name:"55kai",
+                    iPager:4,
+                    iPerPage:"12"
+                },
+                dataRowsField:"Rows",
+                dataTotalField:"Total",
+                perPager:"iPerPage",
+                currentPageField:"iPager",
+            },
+            isPager:false
+
+        });
+//        $(grid).css('margin',10).ligerGrid({
+//            columns:
+//                    [
+//                        { display: '订单序号', name: 'OrderID',type:'float' },
+//                        { display: '运费', name: 'Freight', width: 50,type:'float' },
+//                        { display: '收货人', name: 'ShipName' },
+//                        { display: '收货地址', name: 'ShipAddress' },
+//                        { display: '收货城市', name: 'ShipCity' },
+//                        { display: '收货国家', name: 'ShipCountry' }
+//                    ], isScroll: false, showToggleColBtn: false, width: '90%',
+//            data: f_getOrdersData(row.CustomerID) , showTitle: false, columnWidth: 100
+//            , onAfterShowData: callback,frozen:false
+//        });
+    }
+
+
+    $("#maingrid2").datagrid2({
+
+        columns: [
+            { display: '部门名', name: 'name', id: 'id1', width: 250, align: 'left' },
+            { display: '部门标示', name: 'id', width: 250, type: 'int', align: 'left' },
+
+            { display: '部门描述', name: 'remark', width: 250, align: 'left' }
+        ],
+        source: {
+            ajaxUrl:"./tree.json" ,
+            type:"post",
+            requestData: {
+                a:"qeqwe",
+                id:"555",
+                name:"55kai",
+                iPager:4,
+                iPerPage:"12"
+            },
+            dataRowsField:"Rows",
+            dataTotalField:"Total",
+            perPager:"iPerPage",
+            currentPageField:"iPager",
+        },
+        width: '100%',tree: { columnId: 'id1'},treeExtend:false
+
+    })
+</script>
+</body>
+</html>
