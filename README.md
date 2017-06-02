@@ -1,4 +1,4 @@
-# datagrid基于jquery.ligerui/ligergrid的插件
+# datagrid2基于jquery.ligerui/ligergrid的插件
 
 ## 说明
 将table常用功能进行整合，并且自动生成Table元素
